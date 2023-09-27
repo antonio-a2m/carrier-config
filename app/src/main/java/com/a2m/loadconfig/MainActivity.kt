@@ -84,21 +84,36 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
     fun readConfig():String {
         Log.d("ANTONIO","----------------------------- read config"+System.currentTimeMillis())
-        var txt:String="nothing read "+System.currentTimeMillis()
+        var txt:String=""//nothing read "+System.currentTimeMillis()
+        var tel =  application.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        var deb=tel.deviceSoftwareVersion
+        txt += "\n- Software Version : $deb ;-"
+        deb=tel.simOperator
+        txt += "\n- simOperator : $deb ;-"
+        deb=tel.networkOperatorName
+        txt += "\n- networkOperatorName : $deb ;-"
+        deb=tel.mmsUAProfUrl
+        txt += "\n- mmsUAProfUrl : $deb ;-"
+
         var ccm =  application.getSystemService(Context.CARRIER_CONFIG_SERVICE) as CarrierConfigManager
-        Log.d("ANTONIO","----------------------------- ccm obtained"+System.currentTimeMillis())
-        var deb=ccm.config?.getBoolean(CarrierConfigManager.KEY_ALLOW_ADDING_APNS_BOOL)
-        Log.d("ANTONIO", "---- KEY_ALLOW_ADDING_APNS_BOOL : $deb ;----------------");
-        deb=ccm.config?.getBoolean(CarrierConfigManager.KEY_APN_EXPAND_BOOL)
-        Log.d("ANTONIO", "---- KEY_APN_EXPAND_BOOL : $deb ;----------------");
 
-        var deb3=ccm.config?.getString(CarrierConfigManager.KEY_CARRIER_CONFIG_VERSION_STRING)
-        Log.d("ANTONIO", "---- KEY_CARRIER_CONFIG_VERSION_STRING : $deb3 ;----------------");
-        deb=ccm.config?.getBoolean(CarrierConfigManager.KEY_CARRIER_DEFAULT_WFC_IMS_ENABLED_BOOL)
-        Log.d("ANTONIO", "---- KEY_CARRIER_DEFAULT_WFC_IMS_ENABLED_BOOL : $deb ;----------------");
 
-        //var ise = application.getSystemService(Context.)
-        //ccm.config?.getPersistableBundle(CarrierConfigManager)
+        var deb3=ccm.config?.getString(CarrierConfigManager.ImsServiceEntitlement.KEY_ENTITLEMENT_SERVER_URL_STRING)
+        txt += "\n- KEY_ENTITLEMENT_SERVER_URL_STRING : $deb3 ;-"
+        deb3=ccm.config?.getString(CarrierConfigManager.ImsServiceEntitlement.KEY_FCM_SENDER_ID_STRING)
+        txt += "\n- KEY_FCM_SENDER_ID_STRING : $deb3 ;-"
+        deb3=ccm.config?.getString(CarrierConfigManager.ImsServiceEntitlement.KEY_SHOW_VOWIFI_WEBVIEW_BOOL)
+        txt += "\n- KEY_SHOW_VOWIFI_WEBVIEW_BOOL : ${deb3.toString()} ;-"
+        deb3=ccm.config?.getString(CarrierConfigManager.ImsServiceEntitlement.KEY_IMS_PROVISIONING_BOOL )
+        txt += "\n- KEY_IMS_PROVISIONING_BOOL  : ${deb3.toString()} ;-"
+        deb3=ccm.config?.getString(CarrierConfigManager.ImsServiceEntitlement.KEY_IMS_PROVISIONING_BOOL )
+        txt += "\n- KEY_IMS_PROVISIONING_BOOL  : ${deb3.toString()} ;-"
+        deb3=ccm.config?.getString(CarrierConfigManager.Apn.KEY_SETTINGS_DEFAULT_PROTOCOL_STRING )
+        txt += "\n- KEY_SETTINGS_DEFAULT_PROTOCOL_STRING  : ${deb3.toString()} ;-"
+
+        ccm.config?.putString(CarrierConfigManager.ImsServiceEntitlement.KEY_ENTITLEMENT_SERVER_URL_STRING,"example.com")
+        deb3=ccm.config?.getString(CarrierConfigManager.ImsServiceEntitlement.KEY_ENTITLEMENT_SERVER_URL_STRING)
+        txt += "\n- KEY_ENTITLEMENT_SERVER_URL_STRING : $deb3 ;-"
 
         return txt
     }
